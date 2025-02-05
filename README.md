@@ -4,6 +4,11 @@ Este projeto é um sistema de controle de uma pizzaria desenvolvido para o traba
 
 ## Funcionalidades
 ### 1. Casos de uso envolvidos com suas respectivas documentações;
+  - [Cas.Uso-fazerLogin.pdf](https://github.com/user-attachments/files/18666477/Cas.Uso-fazerLogin.pdf)
+  - [Cas.Uso-cadastrarCliente.pdf](https://github.com/user-attachments/files/18666486/Cas.Uso-cadastrarCliente.pdf)
+  - 
+
+
 ### 2. Diagramas de sequência correspondentes a esses casos de uso;
   - [Cadastrar Produto.pdf](https://github.com/user-attachments/files/18666333/Cadastrar.Produto.pdf)
   - [cadastrar cliente.pdf](https://github.com/user-attachments/files/18666347/cadastrar.cliente.pdf)
