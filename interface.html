@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Pedidos - Pizzaria</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, button {
+            margin-top: 5px;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>CLIENTE</h2>
+        <form id="clienteForm">
+            <label for="nomeCompleto">Nome Completo:</label>
+            <input type="text" id="nomeCompleto" name="nomeCompleto">
+
+            <label for="logradouro">Logradouro:</label>
+            <input type="text" id="logradouro" name="logradouro">
+
+            <label for="numero">Número:</label>
+            <input type="number" id="numero" name="numero">
+
+            <label for="bairro">Bairro:</label>
+            <input type="text" id="bairro" name="bairro">
+
+            <label for="cidade">Cidade:</label>
+            <input type="text" id="cidade" name="cidade">
+
+            <label for="telefone">Telefone:</label>
+            <input type="text" id="telefone" name="telefone">
+
+            <button type="button" onclick="cadastrarCliente()">Cadastrar</button>
+            <button type="reset">Reset</button>
+        </form>
+
+        <h2>PIZZA</h2>
+        <form id="pizzaForm">
+            <label for="sabor">Sabor da Pizza:</label>
+            <select id="sabor" name="sabor">
+                <option value="Calabresa">Calabresa</option>
+                <option value="Marguerita">Marguerita</option>
+                <option value="Frango">Frango</option>
+                <option value="Portuguesa">Portuguesa</option>
+                <option value="Nordestina">Nordestina</option>
+                <option value="Quatro Queijos">Quatro Queijos</option>
+                <option value="Frango com Catupiry">Frango com Catupiry</option>
+                <option value="Camarão">Camarão</option>
+                <option value="Chocolate">Chocolate</option>
+                <option value="Banana com Canela">Banana com Canela</option>
+                <option value="Morango com Chocolate">Morango com Chocolate</option>
+                <option value="Romeu e Julieta">Romeu e Julieta</option>
+            </select>
+
+            <label for="tamanho">Tamanho da Pizza:</label>
+            <select id="tamanho" name="tamanho">
+                <option value="P">Pequena</option>
+                <option value="M">Média</option>
+                <option value="G">Grande</option>
+                <option value="GG">Gigante</option>
+            </select>
+
+            <label for="quantidade">Quantidade:</label>
+            <input type="number" id="quantidade" name="quantidade" min="1" value="1">
+
+            <button type="button" onclick="cadastrarPizza()">Cadastrar</button>
+        </form>
+
+        <div id="resumoContainer" class="hidden">
+            <h2>Resumo do Pedido</h2>
+            <table id="resumoPedido">
+                <thead>
+                    <tr>
+                        <th>Quantidade</th>
+                        <th>Sabor</th>
+                        <th>Tamanho</th>
+                        <th>Preço</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Os pedidos serão adicionados aqui -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function cadastrarCliente() {
+            const nomeCompleto = document.getElementById('nomeCompleto').value;
+            const logradouro = document.getElementById('logradouro').value;
+            const numero = document.getElementById('numero').value;
+            const bairro = document.getElementById('bairro').value;
+            const cidade = document.getElementById('cidade').value;
+            const telefone = document.getElementById('telefone').value;
+
+            fetch('/cadastroCliente', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    nome_completo: nomeCompleto,
+                    logradouro: logradouro,
+                    numero: numero,
+                    bairro: bairro,
+                    cidade: cidade,
+                    telefone_contato: telefone,
+                }),
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+            })
+            .catch((error) => {
+                console.error('Erro:', error);
+            });
+        }
+
+        function cadastrarPizza() {
+            const sabor = document.getElementById('sabor').value;
+            const tamanho = document.getElementById('tamanho').value;
+            const quantidade = document.getElementById('quantidade').value;
+
+            let preco = 0;
+            switch (tamanho) {
+                case 'P':
+                    preco = 15.00;
+                    break;
+                case 'M':
+                    preco = 35.50;
+                    break;
+                case 'G':
+                    preco = 45.00;
+                    break;
+                case 'GG':
+                    preco = 55.00;
+                    break;
+                default:
+                    alert('Tamanho inválido!');
+                    return;
+            }
+
+            const tabelaResumo = document.getElementById('resumoPedido').getElementsByTagName('tbody')[0];
+            const novaLinha = tabelaResumo.insertRow();
+
+            const celulaQuantidade = novaLinha.insertCell(0);
+            const celulaSabor = novaLinha.insertCell(1);
+            const celulaTamanho = novaLinha.insertCell(2);
+            const celulaPreco = novaLinha.insertCell(3);
+
+            celulaQuantidade.innerHTML = quantidade;
+            celulaSabor.innerHTML = sabor;
+            celulaTamanho.innerHTML = tamanho;
+            celulaPreco.innerHTML = ` ${(preco * quantidade).toFixed(2)}`;
+
+            document.getElementById('resumoContainer').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
